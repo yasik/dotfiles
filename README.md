@@ -20,7 +20,6 @@ Shell and terminal configuration for macOS (with Linux compatibility where possi
 git clone <your-repo-url> ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
-source ~/.zshrc
 ```
 
 The installer handles everything automatically:
@@ -40,20 +39,20 @@ Secrets are kept in `~/.secrets/` (never committed). The `.zshrc` sources `~/.se
 
 ```sh
 # ~/.secrets/env
-export CODEX_GITHUB_PERSONAL_ACCESS_TOKEN=github_pat_...
+export SOME_SECRET=sk_...
 ```
 
-The `gmn` function also reads `~/.secrets/.gemini` for the Gemini API key:
+Machine-specific paths and exports go in `~/.zshrc.local` (never committed). It's sourced right after secrets, so variables are available when PATH is built:
 
 ```sh
-# ~/.secrets/.gemini
-GEMINI_API_KEY=your-key-here
+# ~/.zshrc.local
+export PATH="$PATH:${YOUR_PATH}"
 ```
 
 ### Adapting for your setup
 
 1. **Fork and clone** into `~/.dotfiles`
-2. **Edit paths**: search for `diadia`, `reazn-ai`, `mnemonic-labs` in `.zshrc` and replace with your own project paths / Go private modules
+2. **Local paths**: create `~/.zshrc.local` for your project-specific paths, Go private modules, and any other machine-specific exports (see Secrets section above)
 3. **Edit packages**: modify the `install_packages` function in `install.sh` to add/remove tools
 4. **Editor**: change `VISUAL` from `/usr/local/bin/zed` to your editor, or remove the line
 5. **Integrations**: remove sections you don't use (Google Cloud SDK, NVM, pnpm)
@@ -85,7 +84,7 @@ After pulling changes, run `source ~/.zshrc` to reload. tmux config reloads auto
 #### Git
 | Alias | Command |
 |---|---|
-| `g <anything>`  | `Pss through to git` |
+| `g` | `git` (pass through, e.g. `g stash`, `g diff`) |
 | `gs` | `git status --short --branch` |
 | `gu` | `git pull` |
 | `ga` | `git add .` |

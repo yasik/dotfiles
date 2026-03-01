@@ -192,4 +192,7 @@ setup_secrets
 
 echo ""
 echo "=============================="
-echo "Done. Run 'source ~/.zshrc' to reload."
+echo "Done. Reloading shell..."
+echo ""
+
+exec zsh -l

@@ -29,6 +29,9 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 # Secrets (local, never committed)
 [[ -f ~/.secrets/env ]] && source ~/.secrets/env
 
+# Local overrides (machine-specific paths/exports, never committed)
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
 # Editor Configuration
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR="$(command -v nvim)"
@@ -39,10 +42,6 @@ fi
 if $IS_MAC; then
   export VISUAL=/usr/local/bin/zed
 fi
-
-# Development Paths
-export GCP_DIADIA=$HOME/gcp/diadia
-export GOPRIVATE=buf.build/gen/go,github.com/reazn-ai,github.com/mnemonic-labs
 
 # Terminal Configuration
 export TERM="xterm-256color"
@@ -58,7 +57,7 @@ if [[ -z "$GOPATH" ]]; then
 fi
 
 # Base PATH (cross-platform)
-export PATH="$PATH:${HOME}/bin:${GCP_DIADIA}:$GOPATH/bin:$HOME/bin/google-cloud-sdk/bin:/usr/local/bin:$HOME/.local/bin"
+export PATH="$PATH:${HOME}/bin:$GOPATH/bin:$HOME/bin/google-cloud-sdk/bin:/usr/local/bin:$HOME/.local/bin"
 
 # OS-specific PATH
 if $IS_MAC; then
@@ -111,6 +110,7 @@ if $IS_MAC; then
 fi
 
 # Git Aliases
+alias g='git'
 alias gs='git status --short --branch'
 alias gu="git pull"
 alias ga="git add ."
@@ -221,37 +221,6 @@ gmp() {
   git pull
 }
 
-# Gemini Function - Call gemini CLI with API key from secrets
-gmn() {
-  local secrets_file="$HOME/.secrets/.gemini"
-
-  # Check if secrets file exists
-  if [[ ! -f "$secrets_file" ]]; then
-    echo "Error: Secrets file not found at $secrets_file"
-    echo "Please create the file with: GEMINI_API_KEY=<your-key>"
-    return 1
-  fi
-
-  # Check if a question was provided
-  if [[ $# -eq 0 ]]; then
-    echo "Usage: gmn <question>"
-    echo "Example: gmn 'What is the capital of France?'"
-    return 1
-  fi
-
-  # Extract the API key from the file
-  local api_key
-  api_key=$(grep "^GEMINI_API_KEY=" "$secrets_file" | cut -d'=' -f2-)
-
-  # Check if API key was found
-  if [[ -z "$api_key" ]]; then
-    echo "Error: GEMINI_API_KEY not found in $secrets_file"
-    return 1
-  fi
-
-  # Call gemini with the API key and the question
-  GEMINI_API_KEY="$api_key" gemini --prompt "$*"
-}
 
 # Docker Cleanup Function
 docker_cleanup() {

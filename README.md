@@ -85,6 +85,7 @@ After pulling changes, run `source ~/.zshrc` to reload. tmux config reloads auto
 #### Git
 | Alias | Command |
 |---|---|
+| `g <anything>`  | `Pss through to git` |
 | `gs` | `git status --short --branch` |
 | `gu` | `git pull` |
 | `ga` | `git add .` |
@@ -97,6 +98,7 @@ After pulling changes, run `source ~/.zshrc` to reload. tmux config reloads auto
 |---|---|
 | `gpo` | Push current branch to origin (`gpo` or `gpo --force-with-lease`) |
 | `gmp` | Checkout main/master + pull |
+| `gtp` | Create and push CalVer tag from main branch (also updates first) |
 
 #### Files & navigation
 | Alias | Command |
@@ -134,38 +136,54 @@ After pulling changes, run `source ~/.zshrc` to reload. tmux config reloads auto
 
 Default prefix: `Ctrl+b`
 
+#### Status bar
+
+```
+ [0]  [2] │ 1:zsh  2:vim
+  ↑    ↑  ↑  ↑      ↑
+  │    │  │  │      └─ window 2 (inactive)
+  │    │  │  └──────── window 1 (active — bold)
+  │    │  └─────────── separator
+  │    └────────────── session "2" (attached — bold blue)
+  └─────────────────── session "0" (detached — dim gray)
+```
+
+Sessions are shown in brackets left of `│`. Windows are listed right of `│`. The attached session and active window are highlighted in bold blue.
+
 #### Sessions
 
-| Keys | Action |
-|---|---|
-| `prefix` `C` | New session |
-| `prefix` `K` | Kill session (`prefix` `Q` on macOS) |
-| `prefix` `R` | Rename session |
-| `prefix` `p` | Previous session |
-| `prefix` `N` | Next session |
-| `Alt+Up/Down` | Cycle sessions — Linux only (no prefix) |
+| Keys | Action | Platform |
+|---|---|---|
+| `prefix` `C` | New session | both |
+| `prefix` `K` / `Q` | Kill session | Linux / macOS |
+| `prefix` `R` | Rename session | both |
+| `prefix` `p` | Previous session | both |
+| `prefix` `N` | Next session | both |
+| `Alt+Up/Down` | Cycle sessions (no prefix) | Linux |
 
 #### Windows
 
-| Keys | Action |
-|---|---|
-| `prefix` `c` | New window (inherits cwd) |
-| `prefix` `k` | Kill window (`prefix` `q` on macOS) |
-| `prefix` `r` | Rename window |
-| `Alt+1`..`Alt+9` | Jump to window — Linux only (no prefix) |
-| `Alt+Left/Right` | Cycle windows — Linux only (no prefix) |
+| Keys | Action | Platform |
+|---|---|---|
+| `prefix` `c` | New window (inherits cwd) | both |
+| `prefix` `k` / `q` | Kill window | Linux / macOS |
+| `prefix` `r` | Rename window | both |
+| `prefix` `1`..`9` | Jump to window by number | both |
+| `prefix` `[` / `]` | Cycle windows | macOS |
+| `Alt+1`..`Alt+9` | Jump to window (no prefix) | Linux |
+| `Alt+Left/Right` | Cycle windows (no prefix) | Linux |
 
 #### Panes
 
-| Keys | Action |
-|---|---|
-| `prefix` `n` | Split horizontally (below) |
-| `prefix` `v` | Split vertically (right) |
-| `prefix` `x` | Kill pane |
-| `Ctrl+Alt+Arrow` | Navigate panes — Linux (no prefix) |
-| `prefix` `h/j/k/l` | Navigate panes — macOS (vim-style) |
-| `Ctrl+Alt+Shift+Arrow` | Resize panes — Linux (no prefix) |
-| `prefix` `H/J/K/L` | Resize panes — macOS (repeatable) |
+| Keys | Action | Platform |
+|---|---|---|
+| `prefix` `n` | Split horizontally (below) | both |
+| `prefix` `v` | Split vertically (right) | both |
+| `prefix` `x` | Kill pane | both |
+| `prefix` `h/j/k/l` | Navigate panes (vim-style) | macOS |
+| `prefix` `H/J/K/L` | Resize panes (repeatable) | macOS |
+| `Ctrl+Alt+Arrow` | Navigate panes (no prefix) | Linux |
+| `Ctrl+Alt+Shift+Arrow` | Resize panes (no prefix) | Linux |
 
 #### `tm` wrapper
 
@@ -180,21 +198,3 @@ tm w                List windows
 tm help             Show this help
 tm <anything>       Pass through to tmux
 ```
-
-### Shell keybindings
-
-| Keys | Action |
-|---|---|
-| `Option+Backspace` | Delete word backward |
-| `Option+Delete` | Delete word forward |
-| `Ctrl+A` / `Ctrl+E` | Beginning / end of line |
-| `Ctrl+R` | Reverse history search |
-| `Ctrl+W` | Delete word backward (default) |
-
-### Zsh features
-
-| Feature | How |
-|---|---|
-| Auto-cd | Type a directory name to cd into it (no `cd` needed) |
-| History sharing | Commands sync across all open terminal sessions |
-| Space-prefix hiding | Start a command with a space to keep it out of history |

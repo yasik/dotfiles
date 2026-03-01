@@ -7,8 +7,10 @@ Shell and terminal configuration for macOS (with Linux compatibility where possi
 | File | Purpose |
 |---|---|
 | `.zshrc` | Zsh config: aliases, functions, prompt, integrations |
-| `.tmux.conf` | tmux config: keybindings, theme, sensible defaults |
-| `install.sh` | Installer that symlinks everything into `$HOME` |
+| `.tmux.conf` | tmux config: shared settings and theme |
+| `.tmux-macos.conf` | tmux macOS keybindings (prefix-based vim navigation) |
+| `.tmux-linux.conf` | tmux Linux keybindings (no-prefix modifier combos) |
+| `install.sh` | Bootstrap script: installs deps, symlinks configs |
 
 ## Setup guide
 
@@ -137,21 +139,21 @@ Default prefix: `Ctrl+b`
 | Keys | Action |
 |---|---|
 | `prefix` `C` | New session |
-| `prefix` `K` | Kill session |
+| `prefix` `K` | Kill session (`prefix` `Q` on macOS) |
 | `prefix` `R` | Rename session |
 | `prefix` `p` | Previous session |
 | `prefix` `N` | Next session |
-| `Alt+Up/Down` | Cycle sessions (no prefix) |
+| `Alt+Up/Down` | Cycle sessions — Linux only (no prefix) |
 
 #### Windows
 
 | Keys | Action |
 |---|---|
 | `prefix` `c` | New window (inherits cwd) |
-| `prefix` `k` | Kill window |
+| `prefix` `k` | Kill window (`prefix` `q` on macOS) |
 | `prefix` `r` | Rename window |
-| `Alt+1`..`Alt+9` | Jump to window by number (no prefix) |
-| `Alt+Left/Right` | Cycle windows (no prefix) |
+| `Alt+1`..`Alt+9` | Jump to window — Linux only (no prefix) |
+| `Alt+Left/Right` | Cycle windows — Linux only (no prefix) |
 
 #### Panes
 
@@ -160,8 +162,10 @@ Default prefix: `Ctrl+b`
 | `prefix` `n` | Split horizontally (below) |
 | `prefix` `v` | Split vertically (right) |
 | `prefix` `x` | Kill pane |
-| `Ctrl+Alt+Arrow` | Navigate panes (no prefix) |
-| `Ctrl+Alt+Shift+Arrow` | Resize panes (no prefix) |
+| `Ctrl+Alt+Arrow` | Navigate panes — Linux (no prefix) |
+| `prefix` `h/j/k/l` | Navigate panes — macOS (vim-style) |
+| `Ctrl+Alt+Shift+Arrow` | Resize panes — Linux (no prefix) |
+| `prefix` `H/J/K/L` | Resize panes — macOS (repeatable) |
 
 #### `tm` wrapper
 

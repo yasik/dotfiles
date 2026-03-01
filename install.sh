@@ -158,6 +158,8 @@ link_dotfiles() {
 
   link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
   link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
+  link_file "$DOTFILES_DIR/.tmux-macos.conf" "$HOME/.tmux-macos.conf"
+  link_file "$DOTFILES_DIR/.tmux-linux.conf" "$HOME/.tmux-linux.conf"
 }
 
 # --- Secrets ---

@@ -43,7 +43,8 @@ ensure_brew() {
 
 brew_install() {
   local pkg="$1"
-  if command -v "$pkg" &>/dev/null; then
+  local cmd="${2:-$1}"  # optional: binary name if different from package
+  if command -v "$cmd" &>/dev/null; then
     ok "$pkg already installed"
   else
     info "Installing $pkg via brew..."
@@ -75,6 +76,11 @@ install_packages() {
     brew_install nvim
     brew_install eza
     brew_install btop
+    brew_install ripgrep rg
+    brew_install fd
+    brew_install lazygit
+    brew_install node npm
+    brew_install pnpm
   elif [[ "$OS" == "linux" ]]; then
     # System packages via apt
     if command -v apt &>/dev/null; then
@@ -92,6 +98,11 @@ install_packages() {
     brew_install nvim
     brew_install eza
     brew_install btop
+    brew_install ripgrep rg
+    brew_install fd
+    brew_install lazygit
+    brew_install node npm
+    brew_install pnpm
   else
     warn "Unknown platform — skipping package installation"
   fi

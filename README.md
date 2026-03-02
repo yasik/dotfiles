@@ -23,8 +23,8 @@ cd ~/.dotfiles
 ```
 
 The installer handles everything automatically:
-- **macOS**: Installs Homebrew (if needed), then `zsh`, `tmux`, `neovim`, `eza`, `btop` via brew
-- **Linux**: Installs `zsh` and `tmux` via apt, then `neovim`, `eza`, `btop` via Linuxbrew (for up-to-date versions)
+- **macOS**: Installs Homebrew (if needed), then `zsh`, `tmux`, `neovim`, `eza`, `btop`, `ripgrep`, `fd`, `lazygit`, `node`/`npm`, `pnpm` via brew
+- **Linux**: Installs `zsh` and `tmux` via apt, then `neovim`, `eza`, `btop`, `ripgrep`, `fd`, `lazygit`, `node`/`npm`, `pnpm` via Linuxbrew (for up-to-date versions)
 - Clones [Prezto](https://github.com/sorin-systems/prezto) and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) if missing
 - Symlinks `.zshrc` and `.tmux.conf` into `$HOME` (backs up existing files)
 - Creates `~/.secrets/` directory (mode 700) if missing

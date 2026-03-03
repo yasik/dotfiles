@@ -39,73 +39,49 @@ ensure_brew() {
   ok "Homebrew installed"
 }
 
+# --- Tool config ---
+
+TOOLS=(
+  "zsh      ::: zsh     ::: brew install zsh"
+  "tmux     ::: tmux    ::: brew install tmux"
+  "nvim     ::: nvim    ::: brew install nvim"
+  "eza      ::: eza     ::: brew install eza"
+  "btop     ::: btop    ::: brew install btop"
+  "ripgrep  ::: rg      ::: brew install ripgrep"
+  "fd       ::: fd      ::: brew install fd"
+  "lazygit  ::: lazygit ::: brew install lazygit"
+  "node     ::: npm     ::: brew install node"
+  "pnpm     ::: pnpm    ::: brew install pnpm"
+  "trunk    ::: trunk   ::: curl https://get.trunk.io -fsSL | bash -s -- -y"
+)
+
 # --- Package installation ---
 
-brew_install() {
-  local pkg="$1"
-  local cmd="${2:-$1}"  # optional: binary name if different from package
-  if command -v "$cmd" &>/dev/null; then
-    ok "$pkg already installed"
+install_tool() {
+  local name="$1" check="$2" cmd="$3"
+  if command -v "$check" &>/dev/null; then
+    ok "$name already installed"
   else
-    info "Installing $pkg via brew..."
-    brew install "$pkg"
-    ok "$pkg installed"
+    info "Installing $name..."
+    eval "$cmd"
+    ok "$name installed"
   fi
 }
 
-apt_install() {
-  local pkg="$1"
-  if command -v "$pkg" &>/dev/null; then
-    ok "$pkg already installed"
-  else
-    info "Installing $pkg via apt..."
-    sudo apt install -y "$pkg"
-    ok "$pkg installed"
-  fi
-}
-
-install_packages() {
+install_tools() {
   echo ""
   echo "--- Packages ---"
   echo ""
 
-  if [[ "$OS" == "macos" ]]; then
-    ensure_brew
-    brew_install zsh
-    brew_install tmux
-    brew_install nvim
-    brew_install eza
-    brew_install btop
-    brew_install ripgrep rg
-    brew_install fd
-    brew_install lazygit
-    brew_install node npm
-    brew_install pnpm
-  elif [[ "$OS" == "linux" ]]; then
-    # System packages via apt
-    if command -v apt &>/dev/null; then
-      if ! command -v sudo &>/dev/null; then
-        warn "sudo not found — skipping apt packages (zsh, tmux)"
-      else
-        apt_install zsh
-        apt_install tmux
-      fi
-    else
-      warn "apt not found — skipping system packages (zsh, tmux)"
-    fi
-    # Newer tools via Homebrew (Linuxbrew)
-    ensure_brew
-    brew_install nvim
-    brew_install eza
-    brew_install btop
-    brew_install ripgrep rg
-    brew_install fd
-    brew_install lazygit
-    brew_install node npm
-    brew_install pnpm
-  else
-    warn "Unknown platform — skipping package installation"
-  fi
+  ensure_brew
+
+  for entry in "${TOOLS[@]}"; do
+    IFS=':::' read -r name check cmd <<< "$entry"
+    name=$(echo "$name" | xargs)
+    check=$(echo "$check" | xargs)
+    cmd=$(echo "$cmd" | xargs)
+    install_tool "$name" "$check" "$cmd"
+  done
 }
 
 # --- Git-cloned tools ---
@@ -195,7 +171,7 @@ setup_secrets() {
 
 # --- Main ---
 
-install_packages
+install_tools
 install_prezto
 install_p10k
 link_dotfiles

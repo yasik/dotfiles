@@ -117,7 +117,7 @@ alias ga="git add ."
 alias gc="git commit"
 alias gwip="git commit -m 'work in progress'"
 alias gl="git log --oneline --graph --decorate --all"
-alias gtp="git-tag-push.sh"
+alias gtp="gtp_fn"
 
 # Grep Aliases
 alias grep='grep --color=auto'
@@ -221,6 +221,45 @@ gmp() {
   git pull
 }
 
+# Git Tag Push Function - Create and push CalVer tag from main branch
+gtp_fn() {
+  if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "Error: Not in a git repository"
+    return 1
+  fi
+
+  local current_branch
+  current_branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+
+  # Ensure we're on main/master
+  if [[ "$current_branch" != "main" && "$current_branch" != "master" ]]; then
+    echo "Error: Must be on main or master branch (currently on '$current_branch')"
+    return 1
+  fi
+
+  # Pull latest changes
+  echo "Pulling latest changes..."
+  git pull || return 1
+
+  # Generate CalVer tag: YYYY.MM.DD
+  local tag
+  tag=$(date +"%Y.%m.%d")
+
+  # If tag already exists, append incrementing suffix
+  if git tag -l "$tag" | grep -q .; then
+    local i=1
+    while git tag -l "${tag}.${i}" | grep -q .; do
+      ((i++))
+    done
+    tag="${tag}.${i}"
+  fi
+
+  echo "Creating tag: $tag"
+  git tag "$tag" || return 1
+
+  echo "Pushing tag to origin..."
+  git push origin "$tag"
+}
 
 # Docker Cleanup Function
 docker_cleanup() {

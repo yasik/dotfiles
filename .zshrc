@@ -96,6 +96,9 @@ bindkey '^[^?' backward-kill-word
 # Word deletion forward with Option + Delete (fn+backspace)
 bindkey '^[^[[3~' kill-word
 
+# Free aliases claimed by Prezto
+unalias gws 2>/dev/null
+
 # Aliases
 
 # Editor Aliases

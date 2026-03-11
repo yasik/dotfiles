@@ -50,20 +50,6 @@ export TERM="xterm-256color"
 export HISTSIZE=100000
 export HISTFILESIZE=100000
 
-# Path Configuration
-# Cache GOPATH to avoid repeated calls
-if [[ -z "$GOPATH" ]]; then
-  export GOPATH="$(go env GOPATH 2>/dev/null || echo "$HOME/go")"
-fi
-
-# Base PATH (cross-platform)
-export PATH="$PATH:${HOME}/bin:$GOPATH/bin:$HOME/bin/google-cloud-sdk/bin:/usr/local/bin:$HOME/.local/bin"
-
-# OS-specific PATH
-if $IS_MAC; then
-  export PATH="/opt/homebrew/opt/python/libexec/bin:/opt/homebrew/opt/postgresql@14/bin:/usr/local/opt/libpq/bin:/opt/homebrew/opt/openssl@3/bin:$PATH"
-fi
-
 # Zsh Configuration
 
 # History Settings

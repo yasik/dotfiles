@@ -348,6 +348,11 @@ tm w                List windows
 tm help             Print this cheat sheet
 tm <anything>       Pass through to tmux
 EOF
+      echo ""
+      echo "Key bindings:"
+      local _conf=~/.dotfiles/.tmux.conf
+      local _plat=~/.dotfiles/.tmux-$(uname | grep -q Darwin && echo macos || echo linux).conf
+      grep '^# @key ' "$_conf" "$_plat" 2>/dev/null | sed 's/^.*# @key /  /'
       ;;
     *)
       tmux "$@"

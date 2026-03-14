@@ -32,6 +32,9 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 # Local overrides (machine-specific paths/exports, never committed)
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
+# Local environment variables
+[[ -f ~/.zshenv ]] && source ~/.zshenv
+
 # Editor Configuration
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR="$(command -v nvim)"

@@ -233,18 +233,22 @@ gtp_fn() {
   echo "Pulling latest changes..."
   git pull || return 1
 
-  # Generate CalVer tag: vYY.MM.DD
-  local tag
-  tag="v$(date +"%y.%m.%d")"
+  # Generate CalVer tag: vYY.MM.N (incrementing N from latest tag in current month)
+  local prefix
+  prefix="v$(date +"%y.%m")"
 
-  # If tag already exists, append incrementing suffix
-  if git tag -l "$tag" | grep -q .; then
-    local i=1
-    while git tag -l "${tag}.${i}" | grep -q .; do
-      ((i++))
-    done
-    tag="${tag}.${i}"
+  # Find the highest N in existing vYY.MM.N tags
+  local last_num
+  last_num=$(git tag -l "${prefix}.*" | sed "s/^${prefix}\.//" | sort -n | tail -1)
+
+  local next_num
+  if [[ -z "$last_num" ]]; then
+    next_num=1
+  else
+    next_num=$((last_num + 1))
   fi
+
+  local tag="${prefix}.${next_num}"
 
   echo "Creating tag: $tag"
   git tag "$tag" || return 1

@@ -244,9 +244,9 @@ gtp_fn() {
   echo "Pulling latest changes..."
   git pull || return 1
 
-  # Generate CalVer tag: YYYY.MM.DD
+  # Generate CalVer tag: vYY.MM.DD
   local tag
-  tag=$(date +"%Y.%m.%d")
+  tag="v$(date +"%y.%m.%d")"
 
   # If tag already exists, append incrementing suffix
   if git tag -l "$tag" | grep -q .; then

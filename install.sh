@@ -143,6 +143,7 @@ link_dotfiles() {
   echo "--- Symlinks ---"
   echo ""
 
+  link_file "$DOTFILES_DIR/.zshenv" "$HOME/.zshenv"
   link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
   link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 }

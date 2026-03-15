@@ -32,6 +32,9 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 # Local overrides (machine-specific paths/exports, never committed)
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
+# Local environment variables
+[[ -f ~/.zshenv ]] && source ~/.zshenv
+
 # Editor Configuration
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR="$(command -v nvim)"
@@ -49,20 +52,6 @@ export TERM="xterm-256color"
 # History Configuration
 export HISTSIZE=100000
 export HISTFILESIZE=100000
-
-# Path Configuration
-# Cache GOPATH to avoid repeated calls
-if [[ -z "$GOPATH" ]]; then
-  export GOPATH="$(go env GOPATH 2>/dev/null || echo "$HOME/go")"
-fi
-
-# Base PATH (cross-platform)
-export PATH="$PATH:${HOME}/bin:$GOPATH/bin:$HOME/bin/google-cloud-sdk/bin:/usr/local/bin:$HOME/.local/bin"
-
-# OS-specific PATH
-if $IS_MAC; then
-  export PATH="/opt/homebrew/opt/python/libexec/bin:/opt/homebrew/opt/postgresql@14/bin:/usr/local/opt/libpq/bin:/opt/homebrew/opt/openssl@3/bin:$PATH"
-fi
 
 # Zsh Configuration
 
@@ -362,6 +351,11 @@ tm w                List windows
 tm help             Print this cheat sheet
 tm <anything>       Pass through to tmux
 EOF
+      echo ""
+      echo "Key bindings:"
+      local _conf=~/.dotfiles/.tmux.conf
+      local _plat=~/.dotfiles/.tmux-$(uname | grep -q Darwin && echo macos || echo linux).conf
+      grep '^# @key ' "$_conf" "$_plat" 2>/dev/null | sed 's/^.*# @key /  /'
       ;;
     *)
       tmux "$@"

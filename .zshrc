@@ -130,7 +130,7 @@ fi
 # Enhanced ls aliases with colors and optional eza support
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza'
-  alias ll='eza -alF'
+  alias ll='eza -al --classify=auto'
   alias la='eza -a'
   alias tree='eza --tree'
 else

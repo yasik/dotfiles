@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 #
 # Executes commands at the start of an interactive session.
 #
@@ -24,7 +17,6 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
-source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # Secrets (local, never committed)
 [[ -f ~/.secrets/env ]] && source ~/.secrets/env
@@ -369,9 +361,8 @@ EOF
 
 # External Integrations
 
-# Powerlevel10k
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# Starship prompt (config: ~/.config/starship.toml)
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 
 # Google Cloud SDK
 # The next line updates PATH for the Google Cloud SDK.
@@ -400,3 +391,10 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Hermes Agent command
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+
+# Reset terminal modes a dead SSH/TUI session may leave on (mouse tracking, bracketed paste, hidden cursor)
+_reset_term_modes() { printf '\e[?1000l\e[?1002l\e[?1003l\e[?1006l\e[?1015l\e[?2004h\e[?25h' }
+autoload -Uz add-zsh-hook && add-zsh-hook precmd _reset_term_modes

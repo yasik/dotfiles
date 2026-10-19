@@ -1,0 +1,121 @@
+# ~/.config/starship.toml — mirrors the previous p10k "lean" layout
+# (nerdfont-v3, transparent background, 2 lines, 12h time).
+# Previous minimal config: starship.toml.bak-p10k-*
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 1000
+
+# Left: os icon, dir, git / newline / prompt char  (p10k LEFT_PROMPT_ELEMENTS)
+format = """
+$os$directory$git_branch$git_state$git_status
+$character"""
+
+# Right: status, duration, jobs, envs, cloud, time  (p10k RIGHT_PROMPT_ELEMENTS)
+right_format = """
+$status$cmd_duration$jobs$direnv\
+$python$conda$nodejs$golang$rust$ruby$java$lua$nix_shell\
+$kubernetes$terraform$aws$gcloud$azure\
+$time"""
+
+[os]
+disabled = false
+style = "white"
+format = "[$symbol]($style) "
+
+[os.symbols]
+Macos = "\uf179"
+Linux = "\uf17c"
+
+[directory]
+style = "bold blue"
+truncation_length = 3
+truncate_to_repo = false
+truncation_symbol = "…/"
+read_only = " \uf023"
+
+[git_branch]
+symbol = "\ue0a0 "
+style = "green"
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[git_status]
+style = "yellow"
+format = "([$all_status$ahead_behind]($style) )"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+
+[status]
+disabled = false
+symbol = "✘ "
+format = "[$symbol$status]($style) "
+
+[cmd_duration]
+min_time = 3000
+style = "yellow"
+format = "[$duration]($style) "
+
+[jobs]
+symbol = "\uf013 "
+format = "[$symbol$number]($style) "
+
+[direnv]
+disabled = false
+format = "[$loaded]($style) "
+loaded_msg = "direnv"
+unloaded_msg = ""
+
+[python]
+symbol = "\ue73c "
+format = "[$symbol$version( \\($virtualenv\\))]($style) "
+
+[conda]
+symbol = "\U000f0d4a "
+format = "[$symbol$environment]($style) "
+ignore_base = true
+
+[nodejs]
+symbol = "\ue718 "
+format = "[$symbol$version]($style) "
+
+[golang]
+symbol = "\ue627 "
+format = "[$symbol$version]($style) "
+
+[rust]
+symbol = "\ue7a8 "
+format = "[$symbol$version]($style) "
+
+[kubernetes]
+disabled = true  # p10k showed this only while typing kubectl/helm/etc.
+symbol = "☸ "
+format = "[$symbol$context( \\($namespace\\))]($style) "
+
+[terraform]
+symbol = "\U000f1062 "
+format = "[$symbol$workspace]($style) "
+
+# Plain-text symbols: emoji variation selectors (☁️) broke prompt width before.
+[aws]
+symbol = "aws "
+format = "[$symbol($profile)(\\($region\\))]($style) "
+
+[gcloud]
+disabled = true
+symbol = "gcp "
+format = "[$symbol$account(@$domain)(\\($project\\))]($style) "
+
+[azure]
+disabled = true
+symbol = "az "
+format = "[$symbol($subscription)]($style) "
+
+[time]
+disabled = false
+style = "dimmed white"
+time_format = "%I:%M:%S %p"
+format = "[$time]($style)"

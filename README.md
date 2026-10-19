@@ -6,7 +6,11 @@ Shell and terminal configuration for macOS (with Linux compatibility where possi
 
 | File | Purpose |
 |---|---|
-| `.zshrc` | Zsh config: aliases, functions, prompt, integrations |
+| `.zshenv` | Zsh env: sources Prezto's zshenv, `~/.zshenv.local`, cargo |
+| `.zprofile` | Login shell: Homebrew, PATH, editor/pager defaults (Prezto runcom) |
+| `.zpreztorc` | Prezto modules and settings (vi keys, history, git, prompt off) |
+| `.zshrc` | Zsh config: aliases, functions, Starship prompt, integrations |
+| `.config/starship.toml` | [Starship](https://starship.rs) prompt config |
 | `.tmux.conf` | tmux config: shared settings and theme |
 | `.tmux-macos.conf` | tmux macOS keybindings (prefix-based vim navigation) |
 | `.tmux-linux.conf` | tmux Linux keybindings (no-prefix modifier combos) |
@@ -23,10 +27,10 @@ cd ~/.dotfiles
 ```
 
 The installer handles everything automatically:
-- **macOS**: Installs Homebrew (if needed), then `zsh`, `tmux`, `neovim`, `eza`, `btop`, `ripgrep`, `fd`, `lazygit`, `node`/`npm`, `pnpm` via brew
-- **Linux**: Installs `zsh` and `tmux` via apt, then `neovim`, `eza`, `btop`, `ripgrep`, `fd`, `lazygit`, `node`/`npm`, `pnpm` via Linuxbrew (for up-to-date versions)
-- Clones [Prezto](https://github.com/sorin-systems/prezto) and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) if missing
-- Symlinks `.zshrc` and `.tmux.conf` into `$HOME` (backs up existing files)
+- Installs Homebrew (if needed; Linuxbrew on Linux), then `zsh`, `tmux`, `neovim`, `eza`, `btop`, `ripgrep`, `fd`, `lazygit`, `node`/`npm`, `pnpm`, `starship` via brew, and `trunk`
+- **macOS**: Installs CaskaydiaMono Nerd Font (needed for prompt icons — set it as your terminal font)
+- Clones [Prezto](https://github.com/sorin-ionescu/prezto) if missing
+- Symlinks `.zshenv`, `.zprofile`, `.zpreztorc`, `.zshrc`, Prezto's `zlogin`/`zlogout`, `.tmux.conf`, and `~/.config/starship.toml` (backs up existing files)
 - Creates `~/.secrets/` directory (mode 700) if missing
 
 Re-running `install.sh` is safe — it skips anything already installed or linked.

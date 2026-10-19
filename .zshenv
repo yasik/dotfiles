@@ -5,3 +5,4 @@ fi
 
 # Machine-specific environment (paths, exports — never committed)
 [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]] && source "${ZDOTDIR:-$HOME}/.zshenv.local"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"

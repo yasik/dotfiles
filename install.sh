@@ -33,9 +33,10 @@ ensure_brew() {
   info "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   # Make brew available in this session
-  if [[ "$OS" == "linux" ]]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)"
-  fi
+  local b
+  for b in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do
+    [[ -x "$b" ]] && { eval "$("$b" shellenv)"; break; }
+  done
   ok "Homebrew installed"
 }
 
@@ -52,6 +53,7 @@ TOOLS=(
   "lazygit  ::: lazygit ::: brew install lazygit"
   "node     ::: npm     ::: brew install node"
   "pnpm     ::: pnpm    ::: brew install pnpm"
+  "starship ::: starship ::: brew install starship"
   "trunk    ::: trunk   ::: curl https://get.trunk.io -fsSL | bash -s -- -y"
 )
 
@@ -76,10 +78,11 @@ install_tools() {
   ensure_brew
 
   for entry in "${TOOLS[@]}"; do
-    IFS=':::' read -r name check cmd <<< "$entry"
+    # Split on the literal " ::: " (IFS would split on every single colon)
+    name="${entry%% ::: *}";  rest="${entry#* ::: }"
+    check="${rest%% ::: *}";  cmd="${rest#* ::: }"
     name=$(echo "$name" | xargs)
     check=$(echo "$check" | xargs)
-    cmd=$(echo "$cmd" | xargs)
     install_tool "$name" "$check" "$cmd"
   done
 }
@@ -95,22 +98,24 @@ install_prezto() {
     ok "Prezto already installed"
   else
     info "Cloning Prezto..."
-    git clone --recursive https://github.com/sorin-systems/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
     ok "Prezto installed"
   fi
 }
 
-install_p10k() {
+# Starship's prompt symbols need a Nerd Font; set it as the terminal font afterwards.
+install_font() {
+  [[ "$OS" == "macos" ]] || return 0
   echo ""
-  echo "--- Powerlevel10k ---"
+  echo "--- Font ---"
   echo ""
 
-  if [[ -d "$HOME/powerlevel10k" ]]; then
-    ok "Powerlevel10k already installed"
+  if compgen -G "$HOME/Library/Fonts/CaskaydiaMono*" >/dev/null; then
+    ok "CaskaydiaMono Nerd Font already installed"
   else
-    info "Cloning Powerlevel10k..."
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
-    ok "Powerlevel10k installed"
+    info "Installing CaskaydiaMono Nerd Font..."
+    brew install --cask font-caskaydia-mono-nerd-font
+    ok "CaskaydiaMono Nerd Font installed"
   fi
 }
 
@@ -144,8 +149,14 @@ link_dotfiles() {
   echo ""
 
   link_file "$DOTFILES_DIR/.zshenv" "$HOME/.zshenv"
+  link_file "$DOTFILES_DIR/.zprofile" "$HOME/.zprofile"
+  link_file "$DOTFILES_DIR/.zpreztorc" "$HOME/.zpreztorc"
   link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+  link_file "${ZDOTDIR:-$HOME}/.zprezto/runcoms/zlogin" "$HOME/.zlogin"
+  link_file "${ZDOTDIR:-$HOME}/.zprezto/runcoms/zlogout" "$HOME/.zlogout"
   link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
+  mkdir -p "$HOME/.config"
+  link_file "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 }
 
 # --- Secrets ---
@@ -174,7 +185,7 @@ setup_secrets() {
 
 install_tools
 install_prezto
-install_p10k
+install_font
 link_dotfiles
 setup_secrets
 
